@@ -40,6 +40,7 @@ CREATE TABLE `book` (
 
 LOCK TABLES `book` WRITE;
 /*!40000 ALTER TABLE `book` DISABLE KEYS */;
+INSERT INTO `book` VALUES ('A00315367','1247:5','401借阅室','可借',5),('A00315368','1247:5','密集书库(2)','可借',5),('A00315369','1247:5','401借阅室','可借',5),('A00315370','1247:5','401借阅室','可借',5),('A00315371','1247:5','临时馆藏地2','可借',5),('A00665733','1712:45','密集书库(2)','借出',6),('A00665734','1712:45','密集书库(2)','借出',10),('A00665735','1712:45','密集书库(2)','可借',9),('A00665736','1712:45','401借阅室','可借',5),('A00682341','1247:5','密集书库(2)','可借',5),('A00830796','1245:5','401借阅室','可借',9),('A00830797','1245:5','401借阅室','非可借',9),('A00830798','1245:5','401借阅室','可借',9);
 /*!40000 ALTER TABLE `book` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -69,6 +70,7 @@ CREATE TABLE `books` (
 
 LOCK TABLES `books` WRITE;
 /*!40000 ALTER TABLE `books` DISABLE KEYS */;
+INSERT INTO `books` VALUES ('1245:5','978-7-5302-1018-5','平凡的世界','北京十月文艺出版社','路遥','长篇小说',88,3),('1247:5','7-5354-2730-8','狼图腾','长江文艺出版社','姜戎','长篇小说',32,6),('1712:45','7-208-06164-5','追风筝的人','上海人民出版社','卡勒德·胡塞尼','长篇小说',25,4);
 /*!40000 ALTER TABLE `books` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -97,6 +99,7 @@ CREATE TABLE `borrow` (
 
 LOCK TABLES `borrow` WRITE;
 /*!40000 ALTER TABLE `borrow` DISABLE KEYS */;
+INSERT INTO `borrow` VALUES ('123','A00665733','2018-12-15',NULL),('456','A00665734','2018-12-20',NULL);
 /*!40000 ALTER TABLE `borrow` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -120,6 +123,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES ('123','123'),('456','456'),('789','789');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -152,6 +156,7 @@ CREATE TABLE `userdetail` (
 
 LOCK TABLES `userdetail` WRITE;
 /*!40000 ALTER TABLE `userdetail` DISABLE KEYS */;
+INSERT INTO `userdetail` VALUES ('123','张三','男','123@qq.com','13333333333','110101199801014236',1,20,'123'),('456','李四','男','456@qq.com','14444444444','110101199812122301',1,20,'456'),('789','王五','男','789@qq.com','15555555555','110101199902131425',0,20,'789');
 /*!40000 ALTER TABLE `userdetail` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -164,4 +169,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-20 22:49:54
+-- Dump completed on 2018-12-29 12:09:15
