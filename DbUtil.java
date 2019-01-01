@@ -178,7 +178,36 @@ public class DbUtil{
                 book.borrowDate = rs.getString("borrowDate");
                 book.returnDate = rs.getString("returnDate");
                 book.position = rs.getString("position");
-                book.barcode = rs.getStrign("barcode");
+                book.barcode = rs.getString("barcode");
+                hb.add(book);    
+            }
+            rs.close();
+            ps.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return hb; 
+    }
+    public ArrayList<Book> showCurrentBorrowedBooks(){
+        ArrayList<Book> hb = new ArrayList<Book>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try{
+            ps = conn.prepareStatement("select * from borrow,book,books where book.searchno=books.searchno and borrow.barcode=book.barcode and readerid=? and returndate is NULL;");
+            ps.setString(1, userID);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                Book book = new Book();
+                book.bookName = rs.getString("bookName");
+                book.author = rs.getString("author");
+                book.isbn = rs.getString("isbn");
+                book.publisher = rs.getString("publisher");
+                book.type = rs.getString("type");
+                book.price = rs.getInt("price");
+                book.borrowDate = rs.getString("borrowDate");
+                book.returnDate = rs.getString("returnDate");
+                book.position = rs.getString("position");
+                book.barcode = rs.getString("barcode");
                 hb.add(book);    
             }
             rs.close();
