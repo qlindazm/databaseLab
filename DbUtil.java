@@ -103,4 +103,29 @@ public class DbUtil{
             e.printStackTrace();
         }
     }
+    //based barcode
+    public  void returnBook(String barcode){
+        if(userID==null)
+            return;
+        PreparedStatement ps = null;
+        try{
+            ps = conn.prepareStatement("update borrow set returndate=? where readerid=? and barcode=?;");
+            Date dNow = new Date();
+            SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd");
+            ps.setString(1, ft.format(dNow));
+            ps.setString(2, userID);
+            ps.setString(3, barcode);
+            ps.executeUpdate();
+            
+            ps = conn.prepareStatement("update book set state='可借' where barcode=?;");
+            ps.setString(1, barcode);            
+            ps.executeUpdate();
+            
+
+            ps.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+    
 }
