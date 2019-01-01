@@ -3,7 +3,20 @@ import java.io.*;
 import java.text.*;
 import java.util.Date;
 import java.util.Properties;
+import java.util.ArrayList;
 
+class Book{
+    public String bookName;
+    public String author;
+    public String isbn;
+    public String barcode;
+    public String publisher;
+    public String type;
+    public int price;
+    public String borrowDate;
+    public String returnDate;
+    public String position;
+}
 public class DbUtil{
 	private static Connection conn;
 	private static String driverName;
@@ -145,5 +158,34 @@ public class DbUtil{
             e.printStackTrace();
         } 
         return bc;
+    }
+    public ArrayList<Book> showHistoryBorrowedBooks(){
+        ArrayList<Book> hb = new ArrayList<Book>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try{
+            ps = conn.prepareStatement("select * from borrow,book,books where book.searchno=books.searchno and borrow.barcode=book.barcode and readerid=? and returndate is not NULL;");
+            ps.setString(1, userID);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                Book book = new Book();
+                book.bookName = rs.getString("bookName");
+                book.author = rs.getString("author");
+                book.isbn = rs.getString("isbn");
+                book.publisher = rs.getString("publisher");
+                book.type = rs.getString("type");
+                book.price = rs.getInt("price");
+                book.borrowDate = rs.getString("borrowDate");
+                book.returnDate = rs.getString("returnDate");
+                book.position = rs.getString("position");
+                book.barcode = rs.getStrign("barcode");
+                hb.add(book);    
+            }
+            rs.close();
+            ps.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return hb; 
     }
 }
