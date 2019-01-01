@@ -145,7 +145,7 @@ public class DbUtil{
         PreparedStatement ps = null;
         ResultSet rs = null;
         try{
-            ps = conn.prepareStatement(" select * from book,books where books.searchno=book.searchno and bookname=?;");
+            ps = conn.prepareStatement(" select * from book,books where books.searchno=book.searchno and state='可借' and bookname=?;");
             ps.setString(1, bookName);
             rs = ps.executeQuery();
             if(rs.next()){
