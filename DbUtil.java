@@ -80,5 +80,27 @@ public class DbUtil{
         }
         return flag;
     }
-    
+    //based barcode
+    public  void borrowBook(String barcode){
+        if(userID==null)
+            return;
+        PreparedStatement ps = null;
+        try{   
+            ps = conn.prepareStatement("insert into borrow (readerid,barcode,borrowdate) values(?,?,?);");
+            ps.setString(1, userID);
+            ps.setString(2, barcode);
+            Date dNow = new Date();
+            SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd");
+            ps.setString(3, ft.format(dNow));
+            ps.executeUpdate();
+            
+            ps = conn.prepareStatement("update book set state='借出', historyborrowed=historyborrowed+1 where barcode=?;");
+            ps.setString(1, barcode);            
+            ps.executeUpdate();
+
+            ps.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
 }
