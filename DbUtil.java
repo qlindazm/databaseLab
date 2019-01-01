@@ -127,5 +127,23 @@ public class DbUtil{
             e.printStackTrace();
         }
     }
-    
+    public String searchByName(String bookName){
+        String bc = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try{
+            ps = conn.prepareStatement(" select * from book,books where books.searchno=book.searchno and bookname=?;");
+            ps.setString(1, bookName);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                bc = rs.getString("barcode");
+                System.out.println(rs.getString("bookname") + " " +rs.getString("author") + " " +rs.getString("publisher") + " " +rs.getString("isbn") + " " + rs.getString("position"));
+            }
+            rs.close();
+            ps.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+        } 
+        return bc;
+    }
 }
