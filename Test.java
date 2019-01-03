@@ -2,12 +2,14 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Test {
+	static Scanner scan = null;
 	public static void main(String []args) {
+		scan = new Scanner(System.in);
 		DbUtil dbUtil = new DbUtil();
 		boolean isLoop = true;
-		while(isLoop) {
+		while(isLoop) 
 			isLoop = menu(dbUtil);
-		}
+		scan.close();
 	}
 	
 	static boolean menu(DbUtil dbUtil){
@@ -21,7 +23,6 @@ public class Test {
 		System.out.println("0.退出");
 		System.out.print("请输入标号：");
 		
-		Scanner scan = new Scanner(System.in);
 		char ch = scan.next().charAt(0);
 		System.out.println("");
 		
@@ -35,17 +36,17 @@ public class Test {
 				break;
 			case '2':
 				System.out.print("书籍编号：");
-				String borrowcode = scan.nextLine();
+				String borrowcode = scan.next();
 				dbUtil.borrowBook(borrowcode);
 				break;
 			case '3':
 				System.out.print("书籍编号：");
-				String returncode = scan.nextLine();
-				dbUtil.borrowBook(returncode);
+				String returncode = scan.next();
+				dbUtil.returnBook(returncode);
 				break;
 			case '4':
 				System.out.print("书籍名称：");
-				String bookname = scan.nextLine();
+				String bookname = scan.next();
 				String bookcode = dbUtil.searchByName(bookname);
 				if(bookcode != null)
 					System.out.println("该书可借，编号为："+bookcode);
@@ -59,13 +60,11 @@ public class Test {
 				showBooks(dbUtil.showCurrentBorrowedBooks());
 				break;
 			case '0':
-				scan.close();
 				return false;
 			default:
 				System.out.println("请输入合法的字符");
 				break;
 		}
-		scan.close();
 		return true;
 	}
 	
