@@ -120,6 +120,7 @@ public class DbUtil{
     public  void returnBook(String barcode){
         if(userID==null)
             return;
+        System.out.println(111);
         PreparedStatement ps = null;
         try{
             ps = conn.prepareStatement("update borrow set returndate=? where readerid=? and barcode=?;");
@@ -216,5 +217,20 @@ public class DbUtil{
             e.printStackTrace();
         }
         return hb; 
+    }
+    public void showBooksOrdeByBorrowNum(){
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try{
+            ps = conn.prepareStatement("select bookname,sum(historyborrowed) as sum_h from books, book where books.searchno=book.searchno  group by book.searchno order by sum(historyborrowed) desc;");
+            rs = ps.executeQuery();
+            if(rs.next()){
+                System.out..println(rs.getString("bookname") + " " + rs.getString("sum_h"));
+            }
+            rs.close();
+            ps.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
     }
 }
