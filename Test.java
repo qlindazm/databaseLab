@@ -43,7 +43,7 @@ public class Test {
 			case '3':
 				System.out.print("书籍编号：");
 				String returncode = scan.next();
-				dbUtil.borrowBook(returncode);
+				dbUtil.returnBook(returncode);
 				break;
 			case '4':
 				System.out.print("书籍名称：");
