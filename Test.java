@@ -20,6 +20,7 @@ public class Test {
 		System.out.println("4.查书");
 		System.out.println("5.显示历史借阅");
 		System.out.println("6.显示当前已借");
+		System.out.println("7.显示图书借阅排行");
 		System.out.println("0.退出");
 		System.out.print("请输入标号：");
 		
@@ -42,7 +43,7 @@ public class Test {
 			case '3':
 				System.out.print("书籍编号：");
 				String returncode = scan.next();
-				dbUtil.returnBook(returncode);
+				dbUtil.borrowBook(returncode);
 				break;
 			case '4':
 				System.out.print("书籍名称：");
@@ -58,6 +59,9 @@ public class Test {
 				break;
 			case '6':
 				showBooks(dbUtil.showCurrentBorrowedBooks());
+				break;
+			case '7':
+				dbUtil.showBooksOrdeByBorrowNum();
 				break;
 			case '0':
 				return false;
