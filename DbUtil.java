@@ -120,7 +120,6 @@ public class DbUtil{
     public  void returnBook(String barcode){
         if(userID==null)
             return;
-        System.out.println(111);
         PreparedStatement ps = null;
         try{
             ps = conn.prepareStatement("update borrow set returndate=? where readerid=? and barcode=?;");
