@@ -62,7 +62,8 @@ public class DbUtil{
     /* check user when login
      * no such user return -1
      * password uncorrect return 0
-     * success return 1
+     * user return 1
+     * admin return 2
      */
     public int login(String un, String pwd){
     	Statement st = null;
@@ -77,6 +78,15 @@ public class DbUtil{
                     flag = 0;
                     if(rs.getString("password").equals(pwd))
                         flag = 1;
+                }
+            }
+            st = conn.createStatement();
+            rs = st.executeQuery("select * from adminuser;");
+            while(rs.next() && flag==-1){
+                if(rs.getString("userID").equals(un)){
+                    flag = 0;
+                    if(rs.getString("password").equals(pwd))
+                        flag = 2;
                 }
             }
             if(flag==1){
@@ -160,6 +170,8 @@ public class DbUtil{
         return bc;
     }
     public ArrayList<Book> showHistoryBorrowedBooks(){
+        if(userID==null)
+            return null;
         ArrayList<Book> hb = new ArrayList<Book>();
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -189,6 +201,8 @@ public class DbUtil{
         return hb; 
     }
     public ArrayList<Book> showCurrentBorrowedBooks(){
+        if(userID==null)
+            return null;
         ArrayList<Book> hb = new ArrayList<Book>();
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -232,4 +246,5 @@ public class DbUtil{
             e.printStackTrace();
         }
     }
+    public void addBook
 }
