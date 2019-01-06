@@ -16,6 +16,8 @@ class Book{
     public String borrowDate;
     public String returnDate;
     public String position;
+    public String searchno;
+    public String state;
 }
 public class DbUtil{
 	private static Connection conn;
@@ -25,6 +27,7 @@ public class DbUtil{
     private static String password;
 
     public String userID = null;
+    private int adminFlag = 0;
     
 
     static {
@@ -76,8 +79,10 @@ public class DbUtil{
             while(rs.next() && flag==-1){
                 if(rs.getString("userID").equals(un)){
                     flag = 0;
-                    if(rs.getString("password").equals(pwd))
+                    if(rs.getString("password").equals(pwd)){
                         flag = 1;
+                        adminFlag = 0;
+                    }
                 }
             }
             st = conn.createStatement();
@@ -85,8 +90,10 @@ public class DbUtil{
             while(rs.next() && flag==-1){
                 if(rs.getString("userID").equals(un)){
                     flag = 0;
-                    if(rs.getString("password").equals(pwd))
+                    if(rs.getString("password").equals(pwd)){
                         flag = 2;
+                        adminFlag = 1;
+                    }
                 }
             }
             if(flag==1){
@@ -246,5 +253,22 @@ public class DbUtil{
             e.printStackTrace();
         }
     }
-    public void addBook
+    public void addBook(Book book){
+        if(!adminFlag)
+            return;
+        PreparedStatement ps = null;
+        try{
+            ps = conn.prepareStatement("insert into book values (?,?,?,?,0);");
+            ps.setString(1, book.barcode);
+            ps.setString(2, book.searchno);
+            ps.setString(3, book.position);
+            ps.setString(4, book.state);
+            
+            ps.executeUpdate();
+
+            ps.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+        } 
+    }
 }
