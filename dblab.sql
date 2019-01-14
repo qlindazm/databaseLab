@@ -16,13 +16,13 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `admin`
+-- Table structure for table `adminuser`
 --
 
-DROP TABLE IF EXISTS `admin`;
+DROP TABLE IF EXISTS `adminuser`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `admin` (
+CREATE TABLE `adminuser` (
   `adminID` varchar(20) NOT NULL,
   `password` varchar(20) NOT NULL,
   `adminname` varchar(10) DEFAULT NULL,
@@ -32,13 +32,13 @@ CREATE TABLE `admin` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `admin`
+-- Dumping data for table `adminuser`
 --
 
-LOCK TABLES `admin` WRITE;
-/*!40000 ALTER TABLE `admin` DISABLE KEYS */;
-INSERT INTO `admin` VALUES ('admin','admin','管理员','18888888888');
-/*!40000 ALTER TABLE `admin` ENABLE KEYS */;
+LOCK TABLES `adminuser` WRITE;
+/*!40000 ALTER TABLE `adminuser` DISABLE KEYS */;
+INSERT INTO `adminuser` VALUES ('admin','admin','管理员','18888888888');
+/*!40000 ALTER TABLE `adminuser` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -197,4 +197,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-01-04 20:53:59
+-- Dump completed on 2019-01-05 21:18:58
