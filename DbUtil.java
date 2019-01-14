@@ -16,6 +16,8 @@ class Book{
     public String borrowDate;
     public String returnDate;
     public String position;
+    public String searchno;
+    public String state;
 }
 public class DbUtil{
 	private static Connection conn;
@@ -25,6 +27,7 @@ public class DbUtil{
     private static String password;
 
     public String userID = null;
+    private int adminFlag = 0;
     
 
     static {
@@ -62,7 +65,8 @@ public class DbUtil{
     /* check user when login
      * no such user return -1
      * password uncorrect return 0
-     * success return 1
+     * user return 1
+     * admin return 2
      */
     public int login(String un, String pwd){
     	Statement st = null;
@@ -75,8 +79,21 @@ public class DbUtil{
             while(rs.next() && flag==-1){
                 if(rs.getString("userID").equals(un)){
                     flag = 0;
-                    if(rs.getString("password").equals(pwd))
+                    if(rs.getString("password").equals(pwd)){
                         flag = 1;
+                        adminFlag = 0;
+                    }
+                }
+            }
+            st = conn.createStatement();
+            rs = st.executeQuery("select * from adminuser;");
+            while(rs.next() && flag==-1){
+                if(rs.getString("adminID").equals(un)){
+                    flag = 0;
+                    if(rs.getString("password").equals(pwd)){
+                        flag = 2;
+                        adminFlag = 1;
+                    }
                 }
             }
             if(flag==1){
@@ -86,7 +103,8 @@ public class DbUtil{
                 if(rs.next())userID = rs.getString("readerid");
             }
             rs.close();
-            ps.close();
+            if(ps!=null)
+                ps.close();
             st.close();
         }catch(SQLException e){
             e.printStackTrace();
@@ -95,8 +113,10 @@ public class DbUtil{
     }
     //based barcode
     public  void borrowBook(String barcode){
-        if(userID==null)
-            return;
+        if(userID==null){
+            logError("请先登录");
+            return ;
+        }
         PreparedStatement ps = null;
         try{   
             ps = conn.prepareStatement("insert into borrow (readerid,barcode,borrowdate) values(?,?,?);");
@@ -118,9 +138,10 @@ public class DbUtil{
     }
     //based barcode
     public  void returnBook(String barcode){
-        if(userID==null)
-            return;
-        System.out.println(111);
+        if(userID==null){
+            logError("请先登录");
+            return ;
+        }
         PreparedStatement ps = null;
         try{
             ps = conn.prepareStatement("update borrow set returndate=? where readerid=? and barcode=?;");
@@ -161,6 +182,10 @@ public class DbUtil{
         return bc;
     }
     public ArrayList<Book> showHistoryBorrowedBooks(){
+        if(userID==null){
+            logError("请先登录");
+            return null;
+        }
         ArrayList<Book> hb = new ArrayList<Book>();
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -190,6 +215,10 @@ public class DbUtil{
         return hb; 
     }
     public ArrayList<Book> showCurrentBorrowedBooks(){
+        if(userID==null){
+            logError("请先登录");
+            return null;
+        }
         ArrayList<Book> hb = new ArrayList<Book>();
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -225,12 +254,60 @@ public class DbUtil{
             ps = conn.prepareStatement("select bookname,sum(historyborrowed) as sum_h from books, book where books.searchno=book.searchno  group by book.searchno order by sum(historyborrowed) desc;");
             rs = ps.executeQuery();
             if(rs.next()){
-                System.out..println(rs.getString("bookname") + " " + rs.getString("sum_h"));
+                System.out.println(rs.getString("bookname") + " " + rs.getString("sum_h"));
             }
             rs.close();
             ps.close();
         }catch(SQLException e){
             e.printStackTrace();
         }
+    }
+    public void addBook(Book book){
+        if(adminFlag==0){
+            logError("没有权限");
+            return;
+        }
+        PreparedStatement ps = null;
+        try{
+            ps = conn.prepareStatement("insert into book values (?,?,?,?,0);");
+            ps.setString(1, book.barcode);
+            ps.setString(2, book.searchno);
+            ps.setString(3, book.position);
+            ps.setString(4, book.state);    
+            ps.executeUpdate();
+
+            ps = conn.prepareStatement("update books set num=num+1 where searchno=?;");
+            ps.setString(1, book.searchno);
+            ps.executeUpdate();
+
+            ps.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+        } 
+    }
+    public void addBooks(Book book){
+        if(adminFlag==0){
+            logError("没有权限");
+            return;
+        }
+        PreparedStatement ps = null;
+        try{
+            ps = conn.prepareStatement("insert into books values (?,?,?,?,?,?,?,0);");
+            ps.setString(1, book.searchno);
+            ps.setString(2, book.isbn);
+            ps.setString(3, book.bookName);
+            ps.setString(4, book.publisher);
+            ps.setString(5, book.author);
+            ps.setString(6, book.type);
+            ps.setInt(7, book.price);
+            ps.executeUpdate();
+
+            ps.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+        } 
+    }
+    private void logError(String str){
+        System.out.println(str);
     }
 }
